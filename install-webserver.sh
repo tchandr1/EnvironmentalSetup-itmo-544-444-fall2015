@@ -20,7 +20,7 @@ sudo php composer.phar require aws/aws-sdk-php &> /tmp/runcomposer.txt
 
 sudo mv vendor /var/www/html &> /tmp/movevendor.txt
 
-sudo php /var/www/html/setup.php &> /tmp/database-setup.txt
+sudo php /var/www/html/setup-mysql.php &> /tmp/database-setup-mysql.txt
 
 echo "Hello! I am Thanusha Chandrahasa. Course:ITMO544-444, MiniProject1"
 
