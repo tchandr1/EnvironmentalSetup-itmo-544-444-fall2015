@@ -11,19 +11,33 @@ $result = $rds->describeDBInstances([
     'DBInstanceIdentifier' => 'tch-db',
 ]);
 
+
 print_r($result['DBInstance'][0]);
 
 $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
 print "============\n". $endpoint . "================\n";
-$link = mysqli_connect($endpoint,"controller","ilovebunnies","3306") or die("Error " . mysqli_error($link));
+$link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords") or die("Error " . mysqli_error($link));
 echo "Here is the result: " . $link;
-$sql = "CREATE TABLE comments 
+$sql = "CREATE TABLE IF NOT EXISTS items  
 (
-ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-PosterName VARCHAR(32),
-Title VARCHAR(32),
-Content VARCHAR(500)
+    id INT NOT NULL AUTO_INCREMENT,
+    uname VARCHAR(20) NOT NULL,
+    email VARCHAR(20) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    s3rawurl VARCHAR(256) NOT NULL,
+    s3finishedurl VARCHAR(256) NOT NULL,
+    jpgfilename VARCHAR(255) NOT NULL,
+    state TINYINT(3) NOT NULL,
+    PRIMARY KEY(id)
 )";
-$con->query($sql);
+$create_tbl = $link->query($sql);
+if ($sql) {
+        echo "Table is created or No error returned.";
+}
+else {
+        echo "error!!";
+}
+$link->close();
+
 ?>
 
