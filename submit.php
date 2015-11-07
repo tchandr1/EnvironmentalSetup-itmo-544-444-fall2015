@@ -51,9 +51,8 @@ echo $url;
 $rds = new Aws\Rds\RdsClient([
     'version' => 'latest',
     'region'  => 'us-west-2'
-]);
 $result = $rds->describeDBInstances([
-    'DBInstanceIdentifier' => 'mp1-tch',
+    'DBInstanceIdentifier' => 'tch-db',
     #'Filters' => [
     #    [
     #        'Name' => '<string>', // REQUIRED
@@ -64,27 +63,28 @@ $result = $rds->describeDBInstances([
    # 'Marker' => '<string>',
    # 'MaxRecords' => <integer>,
 ]);
-$endpoint = $result['DBInstances']['Endpoint']['Address']
+$endpoint = $result['DBInstances'][0]['Endpoint']['Address']
     echo "============\n". $endpoint . "================";^M
 //echo "begin database";^M
-$link = mysqli_connect($endpoint,"controller","letmein888","customerrecords") or die("Error " . mysqli_error($link));
+$link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords") or die("Error " . mysqli_error($link));
 /* check connection */
 if (mysqli_connect_errno()) {
     printf("Connect failed: %s\n", mysqli_connect_error());
     exit();
 }
 /* Prepared statement, stage 1: prepare */
-if (!($stmt = $link->prepare("INSERT INTO items (id, email,phone,filename,s3rawurl,s3finishedurl,status,issubscribed) VALUES (NULL,?,?,?,?,?,?,?)"))) {
+if (!($stmt = $link->prepare("INSERT INTO items (id,uname, email,phone,s3rawurl,s3finishedurl,jpgfilename,state) VALUES (NULL,?,?,?,?,?,?)"))) {
     echo "Prepare failed: (" . $link->errno . ") " . $link->error;
 }
 $email = $_POST['useremail'];
+$uname = "Thanu";
 $phone = $_POST['phone'];
 $s3rawurl = $url; //  $result['ObjectURL']; from above
-$filename = basename($_FILES['userfile']['name']);
+$jpgfilename = basename($_FILES['userfile']['name']);
 $s3finishedurl = "none";
-$status =0;
-$issubscribed=0;
-$stmt->bind_param("sssssii",$email,$phone,$filename,$s3rawurl,$s3finishedurl,$status,$issubscribed);
+$state =1;
+
+$stmt->bind_param("sssssii",$uname,$email,$phone,$s3rawurl,$s3finishedurl,$jpgfilename,$state);
 if (!$stmt->execute()) {
     echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 }
