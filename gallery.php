@@ -27,7 +27,7 @@ foreach ($result->getPath('DBInstances/*/Endpoint/Address') as $ep) {
     echo "============". $ep . "================";
     $endpoint = $ep;
 }
-//echo "begin database";
+echo "begin connecting  database";
 $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords") or die("Error " . mysqli_error($link));
 
 /* check connection */
