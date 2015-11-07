@@ -3,10 +3,12 @@
 session_start();
 // In PHP versions earlier than 4.1.0, $HTTP_POST_FILES should be used instead
 // of $_FILES.
-echo $_POST['useremail'];
+$useremail= $_POST["useremail"];
+echo $useremail;
 $uploaddir = '/tmp/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
 echo '<pre>';
+echo $uploadfile;
 if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
     echo "File is valid, and was successfully uploaded.\n";
 } else {
@@ -51,6 +53,8 @@ echo $url;
 $rds = new Aws\Rds\RdsClient([
     'version' => 'latest',
     'region'  => 'us-west-2'
+]);
+
 $result = $rds->describeDBInstances([
     'DBInstanceIdentifier' => 'tch-db',
     #'Filters' => [
