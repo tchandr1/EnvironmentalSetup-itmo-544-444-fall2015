@@ -13,6 +13,7 @@ require 'vendor/autoload.php';
 
 use Aws\Rds\RdsClient;
 $client = RdsClient::factory(array(
+'version' => 'latest',
 'region'  => 'us-west-2'
 ));
 
@@ -27,6 +28,10 @@ foreach ($result->getPath('DBInstances/*/Endpoint/Address') as $ep) {
     echo "============". $ep . "================";
     $endpoint = $ep;
 }
+
+$endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
+
+
 echo "begin connecting  database";
 $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords") or die("Error " . mysqli_error($link));
 
