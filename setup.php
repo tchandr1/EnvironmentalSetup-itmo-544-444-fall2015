@@ -67,6 +67,7 @@ $sql = "CREATE TABLE IF NOT EXISTS items
     s3finishedurl VARCHAR(256) NOT NULL,
     jpgfilename VARCHAR(255) NOT NULL,
     state TINYINT(3) NOT NULL,
+    datecolumn TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     PRIMARY KEY(id)
 )";
 $link->query($sql);
