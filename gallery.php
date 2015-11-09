@@ -10,6 +10,18 @@
 
 <!-- Magnific Popup core JS file -->
 <script src="magnific-popup/jquery.magnific-popup.js"></script>
+
+<script>
+
+$('.gallery-item').magnificPopup({
+  type: 'image',
+  gallery:{
+    enabled:true
+  }
+});
+
+</script>
+
 </head>
 <body>
 
@@ -18,6 +30,9 @@ session_start();
 $email = $_POST["email"];
 echo $email;
 print "\n====================\n";
+print "\n====================\n";
+print "\n====================\n";
+
 require 'vendor/autoload.php';
 
 use Aws\Rds\RdsClient;
@@ -62,11 +77,12 @@ print "\n=================\n";
 while ($row = $res->fetch_assoc()) {
     echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
 echo $row['id'] . "Email: " . $row['email'];
+print "\n=========================================\n";
 }
 ?>
 </div>
 
-<?
+<?php
 $link->close();
 ?>
 </body>
