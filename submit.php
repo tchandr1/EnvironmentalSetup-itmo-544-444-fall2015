@@ -61,7 +61,7 @@ $resultTopic = $sns->createTopic(array(
 	'Name' => 'Mp2SnsTopic',
 ));
 
-echo "\nSns Topic is created:"
+echo "\nSns Topic is created:";
 echo $resultTopic;
 
 $arn = $resultTopic['TopicArn'];
