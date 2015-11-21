@@ -52,64 +52,6 @@ $result = $s3->putObject([
    'Key' => $uploadfile
 ]);
 
-echo "Creating SNS topic:\n";
-
-$sns = new Aws\Sns\SnsClient([
-	'version' => 'latest',
-	'region' => 'us-east-1'
-]);
-
-$result = $sns->createTopic(array(
-	'Name' => 'Mp2SnsTopic',
-));
-
-echo "Sns Topic is created:\n";
-echo $result;
-
-$arn = $result['TopicArn'];
-
-echo "\nSetting SNS topic attributes\n";
-
-$result = $sns->setTopicAttributes([
-	// TopicArn is required
-	'TopicArn' => $arn,
-	// AttributeName is required
-	'AttributeName' => 'DisplayName',
-	'AttributeValue' => 'Mp2SnsTopic',
-
-]);
-
-echo "\nSubscribing Topic\n";
-
-for($i=0;$i<120;$i++){
- echo "=";
-}
-
-
-$result = $sns->subscribe([
-    // TopicArn is required
-    'TopicArn' => $arn,
-    // Protocol is required
-    'Protocol' => 'sms',
-    'Endpoint' => $phone,
-]);
-
-echo "\nsubscribed the topic to email\n:";
-echo $result ;
-
-for($i=0;$i<120;$i++){
- echo "=";
-}
-
-echo "\n Publishing the email.....";
-echo "===========================================\n";
-$result = $sns->publish([
-	'Message' => 'sns topic is published to email',
-	'Subject' => 'SNS TOPIC',
-	'TopicArn' => $arn,
-]); 
-
-
 $url = $result['ObjectURL'];
 echo $url;
 $rds = new Aws\Rds\RdsClient([
@@ -163,11 +105,78 @@ echo "Result set order...\n";
 while ($row = $res->fetch_assoc()) {
     echo $row['id'] . " " . $row['email']. " " . $row['phone'];
 }
+
 $link->close();
 //add code to detect if subscribed to SNS topic 
 //if not subscribed then subscribe the user and UPDATE the column in the database with a new value 0 to 1 so that then each time you don't have to resubscribe them
 // add code to generate SQS Message with a value of the ID returned from the most recent inserted piece of work
 //  Add code to update database to UPDATE status column to 1 (in progress)
+
+echo "Creating SNS topic:\n";
+
+$sns = new Aws\Sns\SnsClient([
+        'version' => 'latest',
+        'region' => 'us-east-1'
+]);
+
+$result = $sns->createTopic(array(
+        'Name' => 'Mp2SnsTopic',
+));
+
+echo "Sns Topic is created:\n";
+echo $result;
+
+$arn = $result['TopicArn'];
+
+echo "\nSetting SNS topic attributes\n";
+
+$result = $sns->setTopicAttributes([
+
+ // TopicArn is required
+        'TopicArn' => $arn,
+        // AttributeName is required
+        'AttributeName' => 'DisplayName',
+        'AttributeValue' => 'Mp2SnsTopic',
+
+]);
+
+
+
+
+echo "\nSubscribing Topic\n";
+
+for($i=0;$i<120;$i++){
+ echo "=";
+}
+
+
+$result = $sns->subscribe([
+    // TopicArn is required
+    'TopicArn' => $arn,
+    // Protocol is required
+    'Protocol' => 'sms',
+    'Endpoint' => $phone,
+]);
+
+echo "\nsubscribed the topic to email\n:";
+
+echo $result ;
+
+for($i=0;$i<120;$i++){
+ echo "=";
+}
+
+echo "\n Publishing the email.....";
+echo "===========================================\n";
+$result = $sns->publish([
+        'Message' => 'sns topic is published to email',
+        'Subject' => 'SNS TOPIC',
+        'TopicArn' => $arn,
+]);
+
+
+
+
 
 ?>
 
