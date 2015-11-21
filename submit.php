@@ -116,7 +116,7 @@ echo "Creating SNS topic:\n";
 
 $sns = new Aws\Sns\SnsClient([
         'version' => 'latest',
-        'region' => 'us-east-1'
+        'region' => 'us-west-2'
 ]);
 
 $result = $sns->createTopic(array(
@@ -145,7 +145,7 @@ $result = $sns->setTopicAttributes([
 
 echo "\nSubscribing Topic\n";
 
-for($i=0;$i<120;$i++){
+for($i=0;$i<200;$i++){
  echo "=";
 }
 
@@ -155,7 +155,7 @@ $result = $sns->subscribe([
     'TopicArn' => $arn,
     // Protocol is required
     'Protocol' => 'sms',
-    'Endpoint' => $phone,
+    'Endpoint' => $useremail,
 ]);
 
 echo "\nsubscribed the topic to email\n:";
@@ -170,7 +170,7 @@ echo "\n Publishing the email.....";
 echo "===========================================\n";
 $result = $sns->publish([
         'Message' => 'sns topic is published to email',
-        'Subject' => 'SNS TOPIC',
+        'Subject' => 'SNS TOPIC created with image getting uploaded in S3',
         'TopicArn' => $arn,
 ]);
 
