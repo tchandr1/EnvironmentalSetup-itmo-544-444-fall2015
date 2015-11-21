@@ -93,7 +93,7 @@ echo "\n=========================================\n";
 
 echo "\n Publishing the email.....";
 $resultPublish = $sns->publish([
-	'Message' => 'sns topic is published to email,
+	'Message' => 'sns topic is published to email',
 	'Subject' => 'SNS TOPIC',
 	'TopicArn' => $arn,
 ]); 
