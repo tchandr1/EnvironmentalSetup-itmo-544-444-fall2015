@@ -50,7 +50,7 @@ $result = $s3->putObject([
    'Key' => $uploadfile
 ]);
 
-echo "\nCreating SNS topic\n";
+echo "Creating SNS topic:\n";
 
 $sns = new Aws\Sns\SnsClient([
 	'version' => 'latest',
@@ -61,10 +61,10 @@ $result = $sns->createTopic(array(
 	'Name' => 'Mp2SnsTopic',
 ));
 
-echo "\nSns Topic is created\n:";
-echo $resultTopic;
+echo "Sns Topic is created:\n";
+echo $result;
 
-$arn = $resultTopic['TopicArn'];
+$arn = $result['TopicArn'];
 
 echo "\nSetting SNS topic attributes\n";
 
