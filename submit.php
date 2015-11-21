@@ -50,25 +50,25 @@ $result = $s3->putObject([
    'Key' => $uploadfile
 ]);
 
-print "\nCreating SNS topic\n";
+echo "\nCreating SNS topic\n";
 
 $sns = new Aws\Sns\SnsClient([
 	'version' => 'latest',
-	'region' => 'us-east-1'
+	'region' => 'us-west-2'
 ]);
 
-$resultTopic = $sns->createTopic(array(
+$result = $sns->createTopic(array(
 	'Name' => 'Mp2SnsTopic',
 ));
 
-echo "\nSns Topic is created:";
+echo "\nSns Topic is created\n:";
 echo $resultTopic;
 
 $arn = $resultTopic['TopicArn'];
 
-print "\nSetting SNS topic attributes\n";
+echo "\nSetting SNS topic attributes\n";
 
-$topicAttributes = $sns->setTopicAttributes([
+$result = $sns->setTopicAttributes([
 	// TopicArn is required
 	'TopicArn' => $arn,
 	// AttributeName is required
@@ -77,9 +77,9 @@ $topicAttributes = $sns->setTopicAttributes([
 
 ]);
 
-print "\nSubscribe Topic\n";
+echo "\nSubscribing Topic\n";
 
-$resultSubscribe = $sns->subscribe([
+$result = $sns->subscribe([
     // TopicArn is required
     'TopicArn' => $arn,
     // Protocol is required
@@ -87,12 +87,16 @@ $resultSubscribe = $sns->subscribe([
     'Endpoint' => $useremail,
 ]);
 
-echo "\nsubscribed the topic to email:";
-echo $resultSubscribe ;
-echo "\n=========================================\n";
+echo "\nsubscribed the topic to email\n:";
+echo $result ;
+
+for($i=0;$i<120;$i++){
+ echo "=";
+}
 
 echo "\n Publishing the email.....";
-$resultPublish = $sns->publish([
+echo "===========================================\n";
+$result = $sns->publish([
 	'Message' => 'sns topic is published to email',
 	'Subject' => 'SNS TOPIC',
 	'TopicArn' => $arn,
