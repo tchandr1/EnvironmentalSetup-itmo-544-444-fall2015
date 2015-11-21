@@ -106,7 +106,7 @@ while ($row = $res->fetch_assoc()) {
     echo $row['id'] . " " . $row['email']. " " . $row['phone'];
 }
 
-$link->close();
+
 //add code to detect if subscribed to SNS topic 
 //if not subscribed then subscribe the user and UPDATE the column in the database with a new value 0 to 1 so that then each time you don't have to resubscribe them
 // add code to generate SQS Message with a value of the ID returned from the most recent inserted piece of work
@@ -162,7 +162,7 @@ echo "\nsubscribed the topic to email\n:";
 
 echo $result ;
 
-for($i=0;$i<120;$i++){
+for($i=0;$i<200;$i++){
  echo "=";
 }
 
@@ -174,7 +174,7 @@ $result = $sns->publish([
         'TopicArn' => $arn,
 ]);
 
-
+$link->close();
 
 
 
