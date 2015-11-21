@@ -4,7 +4,9 @@ session_start();
 // In PHP versions earlier than 4.1.0, $HTTP_POST_FILES should be used instead
 // of $_FILES.
 $useremail= $_POST["useremail"];
+$phone = $_POST["phone"];
 echo $useremail;
+echo $phone;
 $uploaddir = '/tmp/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
 echo '<pre>';
@@ -54,7 +56,7 @@ echo "Creating SNS topic:\n";
 
 $sns = new Aws\Sns\SnsClient([
 	'version' => 'latest',
-	'region' => 'us-west-2'
+	'region' => 'us-east-1'
 ]);
 
 $result = $sns->createTopic(array(
@@ -79,12 +81,17 @@ $result = $sns->setTopicAttributes([
 
 echo "\nSubscribing Topic\n";
 
+for($i=0;$i<120;$i++){
+ echo "=";
+}
+
+
 $result = $sns->subscribe([
     // TopicArn is required
     'TopicArn' => $arn,
     // Protocol is required
-    'Protocol' => 'email',
-    'Endpoint' => $useremail,
+    'Protocol' => 'sms',
+    'Endpoint' => $phone,
 ]);
 
 echo "\nsubscribed the topic to email\n:";
