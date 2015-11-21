@@ -49,6 +49,56 @@ $result = $s3->putObject([
     'SourceFile'=> $uploadfile,
    'Key' => $uploadfile
 ]);
+
+print "\nCreating SNS topic\n";
+
+$sns = new Aws\Sns\SnsClient([
+	'version' => 'latest',
+	'region' => 'us-east-1'
+]);
+
+$resultTopic = $sns->createTopic(array[
+	'Name' => 'Mp2SnsTopic',
+]);
+
+echo "\nSns Topic is created:"
+echo $resultTopic;
+
+$arn = $resultTopic['TopicArn'];
+
+print "\nSetting SNS topic attributes\n";
+
+$topicAttributes = $sns->setTopicAttributes([
+	// TopicArn is required
+	'TopicArn' => $arn,
+	// AttributeName is required
+	'AttributeName' => 'DisplayName',
+	'AttributeValue' => 'Mp2SnsTopic',
+
+]);
+
+print "\nSubscribe Topic\n";
+
+$resultSubscribe = $sns->subscribe([
+    // TopicArn is required
+    'TopicArn' => $arn,
+    // Protocol is required
+    'Protocol' => 'email',
+    'Endpoint' => $useremail,
+]);
+
+echo "\nsubscribed the topic to email:";
+echo $resultSubscribe ;
+echo "\n=========================================\n";
+
+echo "\n Publishing the email.....";
+$resultPublish = $sns->publish([
+	'Message' => 'sns topic is published to email,
+	'Subject' => 'SNS TOPIC',
+	'TopicArn' => $arn,
+]); 
+
+
 $url = $result['ObjectURL'];
 echo $url;
 $rds = new Aws\Rds\RdsClient([
