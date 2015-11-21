@@ -57,9 +57,9 @@ $sns = new Aws\Sns\SnsClient([
 	'region' => 'us-east-1'
 ]);
 
-$resultTopic = $sns->createTopic(array[
+$resultTopic = $sns->createTopic(array(
 	'Name' => 'Mp2SnsTopic',
-]);
+));
 
 echo "\nSns Topic is created:"
 echo $resultTopic;
