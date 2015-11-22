@@ -154,7 +154,7 @@ $result = $sns->subscribe([
     // TopicArn is required
     'TopicArn' => $arn,
     // Protocol is required
-    'Protocol' => 'sms',
+    'Protocol' => 'email',
     'Endpoint' => $useremail,
 ]);
 
