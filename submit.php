@@ -3,9 +3,28 @@
 session_start();
 // In PHP versions earlier than 4.1.0, $HTTP_POST_FILES should be used instead
 // of $_FILES.
+?>
+<html>
+<head><title>Hello app</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<h1>Page to upload files</h1>
+<?php
 $useremail= $_POST["useremail"];
 $phone = $_POST["phone"];
+?>
+
+<h4>Submitted to Email ID:</h4>
+
+<?php
 echo $useremail;
+?>
+
+<h4>Phone Number:</h4>
+
+<?php
 echo $phone;
 $uploaddir = '/tmp/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
@@ -124,7 +143,7 @@ $result = $sns->createTopic(array(
 ));
 
 echo "Sns Topic is created:\n";
-echo $result;
+//echo $result;
 
 $arn = $result['TopicArn'];
 
@@ -160,7 +179,7 @@ $result = $sns->subscribe([
 
 echo "\nsubscribed the topic to email\n:";
 
-echo $result ;
+//echo $result ;
 
 for($i=0;$i<200;$i++){
  echo "=";
@@ -175,8 +194,9 @@ $result = $sns->publish([
 ]);
 
 $link->close();
-
-
-
 ?>
+
+</div>
+</body>
+</html>
 
