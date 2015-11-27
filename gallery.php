@@ -77,6 +77,10 @@ print "\n=================\n";
 while ($row = $res->fetch_assoc()) {
     echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
 echo $row['id'] . "Email: " . $row['email'];
+$image = new Imagick($row['s3rawurl']);
+$image->thumbnailImage(1024,0);
+echo $image;
+
 print "\n=========================================\n";
 }
 ?>
