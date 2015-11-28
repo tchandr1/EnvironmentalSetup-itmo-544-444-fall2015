@@ -3,8 +3,7 @@
 
 echo "Installing apache2,php5 curl,mysql-client,imagick"
 sudo apt-get update -y
-sudo apt-get install -y apache2 git php5 php5-curl mysql-client curl php5-mysql
-sudo apt-get install php5-imagick
+sudo apt-get install -y apache2 git php5 php5-curl mysql-client curl php5-mysql php5-imagick
 sudo service apache2 restart
 
 git clone https://github.com/tchandr1/EnvironmentalSetup-itmo-544-444-fall2015.git  
