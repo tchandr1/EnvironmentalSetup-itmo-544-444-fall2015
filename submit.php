@@ -77,7 +77,7 @@ echo "s3RauUrl ready";
 
 //Implementing bordered Imagick
 
-header('Content-type:image/png'):
+//header('Content-type:image/png'):
 
 //loading the image
 $bimage = new Imagick('$uploadfile');
