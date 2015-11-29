@@ -77,42 +77,33 @@ echo "s3RauUrl ready";
 
 //Implementing bordered Imagick
 
-//header('Content-type:image/png'):
+$imgImagick = new Imagick($uploadfile);
+        $imgImagick->borderImage('#000000',20,10);
+        mkdir("/tmp/dirImagickImage");
+$extension = end(explode('.', $fname));
 
-$bimage = new Imagick($uploadfile);
-//adding border
-$bimage->borderImage('#000000',20,10);
-mkdir("/tmp/bImageDir");
+$path = '/tmp/dirImagickImage/';
+$imgImagickId = uniqid("Id");
+// concatenating name and type
+$imgImagickType = $imgImagickId . '.' . $extension;
+$imgImagickPath = $path . $imgImagickType;
 
-$extension = end(explode('.',$fname));
-$path = '/tmp/bImageDir/';
-
-$bimageId = uniqid("Id");
-$bimagetype = $bimageId. '.' . $extension;
-$bimagePath = $path . $bimagetype;
-echo $bimage;
-
-$bimage->writeImage($bimagePath);
-
-//Create s3 bucket to upload bordered image
-echo "Started to upload bordered image to s3";
-$borderedBucket = uniqid("BImage-",false);
-
+$imgImagick->writeImage($imgImagickPath);
+//creating bucket to upload framed image
+$borderbucket = uniqid("borderimage",false);
+echo $borderbucket;
 $result = $s3->createBucket([
     'ACL' => 'public-read',
-    'Bucket' => $borderedBucket,
+    'Bucket' => $borderbucket,
 ]);
-
-
 $result = $s3->putObject([
     'ACL' => 'public-read',
-    'Bucket' => $borderedBucket,
-    'SourceFile'=> $bimagePath,
-   'Key' => "bordered".$bimagetype,
+'Bucket' => $borderbucket,
+   'Key' => "flipped".$imgImagickType,
+'SourceFile' => $imgImagickPath,
 ]);
-echo "Bordered image is uploaded to s3";
-
-$finishedBimageurl = $result['ObjectURL'];
+$finishedimgImagickurl=$result['ObjectURL'];
+echo "processed image uploaded to s3";
 
 
 $rds = new Aws\Rds\RdsClient([
@@ -150,7 +141,7 @@ $uname = "Thanu";
 $phone = $_POST['phone'];
 $s3rawurl = $url; //  $result['ObjectURL']; from above
 $jpgfilename = basename($_FILES['userfile']['name']);
-$s3finishedurl = $finishedBimageurl;
+$s3finishedurl = $finishedimgImagickurl;
 $state =1;
 
 $stmt->bind_param("sssssii",$uname,$email,$phone,$s3rawurl,$s3finishedurl,$jpgfilename,$state);
