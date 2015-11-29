@@ -5,7 +5,8 @@
 </head>
 <body>
 <div class="container">
-<h1>Page to upload files</h1>
+<h1>Welcome to  upload files</h1>
+<a href='introspection.php'>Link to introspection page</a>
 <!-- The data encoding type, enctype, MUST be specified as below -->
 <form enctype="multipart/form-data" action="submit.php" method="POST">
     <div class="form-group">
