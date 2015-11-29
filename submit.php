@@ -28,6 +28,7 @@ echo $useremail;
 echo $phone;
 $uploaddir = '/tmp/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+$fname = $_FILES['userfile']['name'];
 echo '<pre>';
 echo $uploadfile;
 if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
