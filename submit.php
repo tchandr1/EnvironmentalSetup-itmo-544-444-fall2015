@@ -79,20 +79,19 @@ echo "s3RauUrl ready";
 
 //header('Content-type:image/png'):
 
-//loading the image
 $bimage = new Imagick('$uploadfile');
 
 //adding border
 $bimage->borderImage('#000000',20,10);
 mkdir("/tmp/bImageDir");
 
-$extension = end(explode('.',$name));
+$extension = end(explode('.',$fname));
 $path = '/tmp/bImageDir';
 
 $bimageId = uniqid("Id");
 $bimagetype = $bimageId. '.' . $extension;
 $bimagePath = $path . $bimagetype;
-echo $image;
+echo $bimage;
 
 $image->writeImage($bimagePath);
 
@@ -110,7 +109,7 @@ $result = $s3->putObject([
     'ACL' => 'public-read',
     'Bucket' => $borderedBucket,
     'SourceFile'=> $bimagePath,
-   'Key' => $bimagePath,
+   'Key' => "bordered".$bimagetype,
 ]);
 echo "Bordered image is uploaded to s3";
 
