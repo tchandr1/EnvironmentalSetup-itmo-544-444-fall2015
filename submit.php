@@ -80,16 +80,21 @@ echo "s3RauUrl ready";
 header('Content-type:image/png'):
 
 //loading the image
-$image = new Imagick('$uploadfile');
+$bimage = new Imagick('$uploadfile');
 
 //adding border
-$image->borderImage('#000000',20,10);
+$bimage->borderImage('#000000',20,10);
 mkdir("/tmp/bImageDir");
 
+$extension = end(explode('.',$name));
 $path = '/tmp/bImageDir';
+
+$bimageId = uniqid("Id");
+$bimagetype = $bimageId. '.' . $extension;
+$bimagePath = $path . $bimagetype;
 echo $image;
 
-$image->writeImage($path);
+$image->writeImage($bimagePath);
 
 //Create s3 bucket to upload bordered image
 echo "Started to upload bordered image to s3";
@@ -104,10 +109,13 @@ $result = $s3->createBucket([
 $result = $s3->putObject([
     'ACL' => 'public-read',
     'Bucket' => $borderedBucket,
-    'SourceFile'=> $path,
-   'Key' => $uploadfile
+    'SourceFile'=> $bimagePath,
+   'Key' => $bimagePath,
 ]);
 echo "Bordered image is uploaded to s3";
+
+$finishedBimageurl = $result['ObjectURL'];
+
 
 $rds = new Aws\Rds\RdsClient([
     'version' => 'latest',
@@ -144,7 +152,7 @@ $uname = "Thanu";
 $phone = $_POST['phone'];
 $s3rawurl = $url; //  $result['ObjectURL']; from above
 $jpgfilename = basename($_FILES['userfile']['name']);
-$s3finishedurl = "none";
+$s3finishedurl = $finishedBimageurl;
 $state =1;
 
 $stmt->bind_param("sssssii",$uname,$email,$phone,$s3rawurl,$s3finishedurl,$jpgfilename,$state);
