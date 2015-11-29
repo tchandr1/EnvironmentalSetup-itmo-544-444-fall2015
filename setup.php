@@ -55,8 +55,7 @@ $result = $rds->waitUntil('DBInstanceAvailable',['DBInstanceIdentifier' => 'tch-
 $result = $rds->createDBInstanceReadReplica([
         'DBInstanceIdentifier'=> 'tch-db-readreplica',
         'SourceDBInstanceIdentifier'=> 'tch-db',
-        'DBInstanceClass' => 'db.t1.micro',
-        'AvailabilityZone'=> 'us-west-2',
+                
 ]);
 
 
