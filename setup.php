@@ -49,6 +49,18 @@ print "Create RDS DB results: \n";
 # print_r($rds);
 $result = $rds->waitUntil('DBInstanceAvailable',['DBInstanceIdentifier' => 'tch-db',
 ]);
+
+// Create read replica
+
+$result = $rds->createDBInstanceReadReplica([
+        'DBInstanceIdentifier'=> 'tch-db-readreplica',
+        'SourceDBInstanceIdentifier'=> 'tch-db',
+        'DBInstanceClass' => 'db.t1.micro',
+        'AvailabilityZone'=> 'us-west-2',
+]);
+
+
+
 // Create a table 
 $result = $rds->describeDBInstances([
     'DBInstanceIdentifier' => 'tch-db',
