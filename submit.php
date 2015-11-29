@@ -79,7 +79,7 @@ echo "s3RauUrl ready";
 
 //header('Content-type:image/png'):
 
-$bimage = new Imagick('$uploadfile');
+$bimage = new Imagick($uploadfile);
 
 //adding border
 $bimage->borderImage('#000000',20,10);
