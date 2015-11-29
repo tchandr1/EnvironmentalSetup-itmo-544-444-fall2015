@@ -80,24 +80,23 @@ echo "s3RauUrl ready";
 //header('Content-type:image/png'):
 
 $bimage = new Imagick($uploadfile);
-
 //adding border
 $bimage->borderImage('#000000',20,10);
 mkdir("/tmp/bImageDir");
 
 $extension = end(explode('.',$fname));
-$path = '/tmp/bImageDir';
+$path = '/tmp/bImageDir/';
 
 $bimageId = uniqid("Id");
 $bimagetype = $bimageId. '.' . $extension;
 $bimagePath = $path . $bimagetype;
 echo $bimage;
 
-$image->writeImage($bimagePath);
+$bimage->writeImage($bimagePath);
 
 //Create s3 bucket to upload bordered image
 echo "Started to upload bordered image to s3";
-$borderedBucket = uniqid("php-tch-BImage-",false);
+$borderedBucket = uniqid("BImage-",false);
 
 $result = $s3->createBucket([
     'ACL' => 'public-read',
