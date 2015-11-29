@@ -73,6 +73,42 @@ $result = $s3->putObject([
 
 $url = $result['ObjectURL'];
 echo $url;
+echo "s3RauUrl ready";
+
+//Implementing bordered Imagick
+
+header('Content-type:image/png'):
+
+//loading the image
+$image = new Imagick('$uploadfile');
+
+//adding border
+$image->borderImage('#000000',20,10);
+mkdir("/tmp/bImageDir");
+
+$path = '/tmp/bImageDir';
+echo $image;
+
+$image->writeImage($path);
+
+//Create s3 bucket to upload bordered image
+echo "Started to upload bordered image to s3";
+$borderedBucket = uniqid("php-tch-BImage-",false);
+
+$result = $s3->createBucket([
+    'ACL' => 'public-read',
+    'Bucket' => $borderedBucket,
+]);
+
+
+$result = $s3->putObject([
+    'ACL' => 'public-read',
+    'Bucket' => $borderedBucket,
+    'SourceFile'=> $path,
+   'Key' => $uploadfile
+]);
+echo "Bordered image is uploaded to s3";
+
 $rds = new Aws\Rds\RdsClient([
     'version' => 'latest',
     'region'  => 'us-west-2'
