@@ -36,17 +36,15 @@ $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords");
 
 echo "connection made\n=======================";
 //create directory for dbbackup
-mkdir("/tmp/dbBackup");
+mkdir("/tmp/Backup");
 
-$dbBackupPath = '/tmp/dbBackup/';
-$iname = uniqid("backupDB", false);
-$extension = $iname . '.' . sql;
-$path = $dbBackupPath . $extension;
-$sql="mysqldump --user=$dbuser --password=$dbpass --host=$endpoint $dbname > $path";
+$Bkpspath = '/tmp/Backup/';
+$bname = uniqid("DBBackUp", false);
+$append = $bname . '.' . sql;
+$Path = $Bkpspath . $append;
+$sql="mysqldump --user=$dbuser --password=$dbpass --host=$endpoint $dbname > $Path";
 exec($sql);
-$dbBackupbucket = uniqid("dbBackup-", false);
-
-echo "creating dbBackupBucket=======================";
+$bucketname = uniqid("dbbackup", false);
 
 $s3 = new Aws\S3\S3Client([
     'version' => 'latest',
@@ -55,16 +53,16 @@ $s3 = new Aws\S3\S3Client([
 # AWS PHP SDK version 3 create bucket
 $result = $s3->createBucket([
     'ACL' => 'public-read',
-    'Bucket' => $dbBackupbucket,
+    'Bucket' => $bucketname,
 ]);
 # PHP version 3
 $result = $s3->putObject([
     'ACL' => 'public-read',
-    'Bucket' => $dbBackupbucket,
-   'Key' => $extension,
-'SourceFile' => $path,
+    'Bucket' => $bucketname,
+   'Key' => $append,
+'SourceFile' => $Path,
 ]);
-$result = $s3->putBucketLifecycleConfiguration([
+$objectrule = $s3->putBucketLifecycleConfiguration([
     'Bucket' => $bucketname,
     'LifecycleConfiguration' => [
         'Rules' => [ 
@@ -75,16 +73,16 @@ $result = $s3->putBucketLifecycleConfiguration([
                 'NoncurrentVersionExpiration' => [
                     'NoncurrentDays' => 1,
                 ],
-                              
+               
                 'Prefix' => ' ',
                 'Status' => 'Enabled',
                 
             ],
             
         ],
-      ],
+    ],
 ]);
 mysql_close($link);
-echo "dbBackup is created";
+echo "Database Backup created successful";
 
 ?>
