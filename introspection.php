@@ -34,7 +34,7 @@ $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
 echo "Make a connection to MYSQL\n=====================";
 $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords");
 
-echo "connection made\n======================="
+echo "connection made\n=======================";
 //create directory for dbbackup
 mkdir("/tmp/dbBackup");
 
