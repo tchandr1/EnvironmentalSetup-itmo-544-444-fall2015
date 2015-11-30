@@ -10,9 +10,7 @@
 <div class="container">
 <h1>Introspection page to create database export feature</h1>
 <a href='index.php'>HomePage</a>
-</div>
-</body>
-</html>
+
 <?php
 //From :http://www.tutorialspoint.com/php/perform_mysql_backup_php.htm
 
@@ -86,3 +84,6 @@ mysql_close($link);
 echo "Database Backup created successful";
 
 ?>
+</div>
+</body>
+</html>
