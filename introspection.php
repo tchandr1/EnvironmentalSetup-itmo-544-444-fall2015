@@ -22,6 +22,7 @@ $dbpass = 'ilovebunnies';
 
 require 'vendor/autoload.php';
 
+echo "describe DB Instances of tch-db\n==================";
 $rdswest = new Aws\Rds\RdsClient([
 	'version' => 'latest',
 	'region' => 'us-west-2'
@@ -29,8 +30,11 @@ $rdswest = new Aws\Rds\RdsClient([
 
 $result = $rdswest->describeDBInstances(['DBInstanceIdentifier' => 'tch-db']);
 $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
-$link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords")
 
+echo "Make a connection to MYSQL\n=====================";
+$link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords");
+
+echo "connection made\n======================="
 //create directory for dbbackup
 mkdir("/tmp/dbBackup");
 
@@ -41,6 +45,8 @@ $path = $dbBackupPath . $extension;
 $sql="mysqldump --user=$dbuser --password=$dbpass --host=$endpoint $dbname > $path";
 exec($sql);
 $dbBackupbucket = uniqid("dbBackup-", false);
+
+echo "creating dbBackupBucket=======================";
 
 $s3 = new Aws\S3\S3Client([
     'version' => 'latest',
@@ -77,7 +83,6 @@ $result = $s3->putBucketLifecycleConfiguration([
             
         ],
       ],
-    ],
 ]);
 mysql_close($link);
 echo "dbBackup is created";
