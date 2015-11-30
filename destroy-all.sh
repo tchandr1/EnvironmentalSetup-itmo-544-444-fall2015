@@ -69,16 +69,21 @@ aws autoscaling delete-launch-configuration --launch-configuration-name $LAUNCHC
 fi
 
 #Get the list of topics present
-TOPICNAME=(`aws sns list-topics --output json | grep TopicArn | sed "s/TopicArn//g"| sed "s/[\", ]//g" | sed "s/\://"`)
+TOPICARN=(`aws sns list-topics --output json | grep TopicArn | sed "s/TopicArn//g"| sed "s/[\", ]//g" | sed "s/\://"`)
 
 # Delete created topics
 
-if [ ${#TOPICNAME[@]} -gt 0 ]
+if [ ${#TOPICARN[@]} -gt 0 ]
   then
 
-aws sns delete-topic --topic-arn $TOPICNAME
+aws sns delete-topic --topic-arn $TOPICARN
 fi
 
+# List all subscriptions of the required TOPIC ARN
+SUBSCRIPTIONS=(`aws sns-list-subscriptions-by-topic TopicArn $TOPICARN`)
+
+#Unsubscribe 
+aws sns-unsubscribe $TOPICARN
 
 
 
