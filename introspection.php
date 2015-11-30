@@ -38,7 +38,7 @@ echo "connection made\n=======================";
 //create directory for dbbackup
 mkdir("/tmp/dbBackup");
 
-$dbBackupPath = '/tmp/Backup/';
+$dbBackupPath = '/tmp/dbBackup/';
 $iname = uniqid("dbBackup", false);
 $extension = $iname . '.' . sql;
 $path = $dbBackupPath . $extension;
