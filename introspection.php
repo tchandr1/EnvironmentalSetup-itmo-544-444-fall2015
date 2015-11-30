@@ -34,6 +34,8 @@ $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords");
 
 echo "connection made\n=======================";
 //create directory for dbbackup
+echo "Make Directory to store backed up database\n==================";
+
 mkdir("/tmp/Backup");
 
 $Bkpspath = '/tmp/Backup/';
@@ -44,15 +46,23 @@ $sql="mysqldump --user=$dbuser --password=$dbpass --host=$endpoint $dbname > $Pa
 exec($sql);
 $bucketname = uniqid("dbbackup", false);
 
+echo "Creating s3 object\n==================";
+
 $s3 = new Aws\S3\S3Client([
     'version' => 'latest',
     'region'  => 'us-west-2'
 ]);
+
+echo "creating bucket\n==================";
+
 # AWS PHP SDK version 3 create bucket
 $result = $s3->createBucket([
     'ACL' => 'public-read',
     'Bucket' => $bucketname,
 ]);
+
+echo "Put object inside bucket\n==================";
+
 # PHP version 3
 $result = $s3->putObject([
     'ACL' => 'public-read',
@@ -60,6 +70,9 @@ $result = $s3->putObject([
    'Key' => $append,
 'SourceFile' => $Path,
 ]);
+
+echo "Life cycle configuration of bucket\n==================";
+
 $objectrule = $s3->putBucketLifecycleConfiguration([
     'Bucket' => $bucketname,
     'LifecycleConfiguration' => [
