@@ -39,7 +39,7 @@ echo "connection made\n=======================";
 mkdir("/tmp/dbBackup");
 
 $dbBackupPath = '/tmp/dbBackup/';
-$iname = uniqid("dbBackup", false);
+$iname = uniqid("backupDB", false);
 $extension = $iname . '.' . sql;
 $path = $dbBackupPath . $extension;
 $sql="mysqldump --user=$dbuser --password=$dbpass --host=$endpoint $dbname > $path";
