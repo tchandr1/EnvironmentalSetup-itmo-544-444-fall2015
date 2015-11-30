@@ -66,8 +66,6 @@ if (mysqli_connect_errno()) {
 }
 
 //below line is unsafe - $email is not checked for SQL injection -- don't do this in real life or use an ORM instead
-if(isset($_SESSION['useremail'])){
-$email=$_SESSION['useremail'];
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
 //$link->real_query("SELECT * FROM items");
 $res = $link->use_result();
@@ -80,14 +78,10 @@ while ($row = $res->fetch_assoc()) {
     echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
 echo $row['id'] . "Email: " . $row['email'];
 print "\n=========================================\n";
-}
-}
-else{
-echo "No id is entered"
-
-echo "<img src =\" " . $row['s3rawurl'] . "\" />";
 
 }
+
+
 ?>
 </div>
 
