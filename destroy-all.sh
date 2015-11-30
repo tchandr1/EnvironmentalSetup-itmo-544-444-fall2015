@@ -68,9 +68,16 @@ aws autoscaling delete-auto-scaling-group --auto-scaling-group-name $SCALENAME
 aws autoscaling delete-launch-configuration --launch-configuration-name $LAUNCHCONF
 fi
 
+#Get the list of topics present
+TOPICNAME=(`aws sns list-topics --output json | grep TopicArn | sed "s/TopicArn//g"| sed "s/[\", ]//g" | sed "s/\://"`)
 
+# Delete created topics
 
+if [ ${#TOPICNAME[@]} -gt 0 ]
+  then
 
+aws sns delete-topic --topic-arn $TOPICNAME
+fi
 
 
 
