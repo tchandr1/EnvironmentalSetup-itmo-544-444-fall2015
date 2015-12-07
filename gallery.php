@@ -106,7 +106,8 @@ print "\n=========================================\n";
 else{
 print "\n============================================\n";
 print "The user has not entered any emailid";
-$email=$_SESSION['useremail'];
+
+$email=$_POST['email'];
 
 
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
