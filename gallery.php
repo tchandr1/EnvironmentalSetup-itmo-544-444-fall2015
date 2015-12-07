@@ -29,9 +29,6 @@ $('.gallery-item').magnificPopup({
 session_start();
 $email = $_POST["email"];
 echo $email;
-print "\n====================\n";
-print "\n====================\n";
-print "\n====================\n";
 
 require 'vendor/autoload.php';
 
@@ -57,6 +54,8 @@ $endpoint = $result['DBInstances'][0]['Endpoint']['Address'];
 
 
 echo "begin connecting  database";
+
+
 $link = mysqli_connect($endpoint,"controller","ilovebunnies","customerrecords") or die("Error " . mysqli_error($link));
 
 /* check connection */
@@ -66,6 +65,10 @@ if (mysqli_connect_errno()) {
 }
 
 //below line is unsafe - $email is not checked for SQL injection -- don't do this in real life or use an ORM instead
+
+if(isset($_SESSION['useremail'])){
+$email=$_SESSION['useremail'];
+
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
 //$link->real_query("SELECT * FROM items");
 $res = $link->use_result();
@@ -75,13 +78,49 @@ print "\n=================\n";
 <div class="gallery">
 <?php
 while ($row = $res->fetch_assoc()) {
-    echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
-echo $row['id'] . "Email: " . $row['email'];
+    //echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
+//echo $row['id'] . "Email: " . $row['email'];
+echo "<img src =\"".$row['s3finishedurl'] . "\">";
+
 print "\n=========================================\n";
 
 }
 
+$link->real_query("SELECT * FROM items WHERE email = '$email'");
+//$link->real_query("SELECT * FROM items");
+$res = $link->use_result();
+echo "Raw images\n";
+print "\n=================\n";
 
+while ($row = $res->fetch_assoc()) {
+    //echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
+//echo $row['id'] . "Email: " . $row['email'];
+echo "<img src =\"".$row['s3rawurl'] . "\">";
+
+print "\n=========================================\n";
+
+}
+
+}
+else{
+print "\n============================================\n";
+print "The user has not entered any emailid";
+$link->real_query("SELECT * FROM items WHERE email = '$email'");
+//$link->real_query("SELECT * FROM items");
+$res = $link->use_result();
+echo "Raw images\n";
+print "\n=================\n";
+
+while ($row = $res->fetch_assoc()) {
+    //echo "<img src =\" " . $row['s3rawurl'] . "\" /><img src =\"" .$row['s3finishedurl'] . "\"/>";
+//echo $row['id'] . "Email: " . $row['email'];
+echo "<img src =\"".$row['s3rawurl'] . "\">";
+
+print "\n=========================================\n";
+
+}
+
+}
 ?>
 </div>
 
