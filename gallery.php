@@ -66,10 +66,10 @@ if (mysqli_connect_errno()) {
 
 //below line is unsafe - $email is not checked for SQL injection -- don't do this in real life or use an ORM instead
 
-if(isset($_SESSION['useremail'])){
-$email=$_SESSION['useremail'];
+if(isset($_POST['useremail'])){
+$email=$_POST['useremail'];
 print "The user has  entered  emailid";
-print "==========$email============";
+echo $email;
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
 //$link->real_query("SELECT * FROM items");
 $res = $link->use_result();
