@@ -27,8 +27,8 @@ $('.gallery-item').magnificPopup({
 
 <?php
 session_start();
-$email = $_POST["email"];
-echo $email;
+//$email = $_POST["email"];
+//echo $email;
 
 require 'vendor/autoload.php';
 
@@ -68,7 +68,8 @@ if (mysqli_connect_errno()) {
 
 if(isset($_SESSION['useremail'])){
 $email=$_SESSION['useremail'];
-
+print "The user has  entered  emailid";
+print "==========$email============";
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
 //$link->real_query("SELECT * FROM items");
 $res = $link->use_result();
@@ -105,6 +106,11 @@ print "\n=========================================\n";
 else{
 print "\n============================================\n";
 print "The user has not entered any emailid";
+$email=$_SESSION['useremail'];
+print "The user has  entered  emailid";
+print "==========$email============";
+
+
 $link->real_query("SELECT * FROM items WHERE email = '$email'");
 //$link->real_query("SELECT * FROM items");
 $res = $link->use_result();
